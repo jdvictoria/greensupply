@@ -11,9 +11,16 @@ import {
   Chip,
   TablePagination,
   CircularProgress,
+  Button,
 } from "@mui/material";
 
-import { Package, Warehouse, DollarSign, AlertCircle } from "lucide-react";
+import {
+  Package,
+  Warehouse,
+  DollarSign,
+  AlertCircle,
+  RotateCcw,
+} from "lucide-react";
 
 import { MetricCard } from "@/components/metric-card";
 import { ViewDialog } from "@/components/view-dialog";
@@ -26,6 +33,7 @@ import {
 } from "@/lib/utils";
 
 import { useInventory } from "@/context/inventory-context";
+import { resetDataAction } from "@/app/actions/reset";
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
@@ -94,14 +102,45 @@ export default function DashboardPage() {
     );
   }
 
+  const handleReset = async () => {
+    if (
+      confirm(
+        "Are you sure you want to reset all data? This will restore all data to default values.",
+      )
+    ) {
+      await resetDataAction();
+      window.location.reload();
+    }
+  };
+
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        Overview
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-        Monitor your inventory across all warehouse locations
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          mb: 4,
+        }}
+      >
+        <Box>
+          <Typography variant="h4" fontWeight={700} gutterBottom>
+            Overview
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Monitor your inventory across all warehouse locations
+          </Typography>
+        </Box>
+        <Button
+          variant="outlined"
+          color="error"
+          startIcon={<RotateCcw size={20} />}
+          onClick={handleReset}
+          sx={{ minWidth: "auto" }}
+        >
+          Reset Data
+        </Button>
+      </Box>
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, sm: 6, lg: 3 }}>

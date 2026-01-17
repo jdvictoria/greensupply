@@ -25,8 +25,8 @@ import {
 import { Edit, Trash2, Plus } from "lucide-react";
 
 import type { Product } from "@/lib/types";
-import { products as initialProducts } from "@/lib/utils";
 
+import { useInventory } from "@/context/inventory-context";
 import { ToastNotification } from "@/components/toast-notification";
 import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog";
 
@@ -51,8 +51,8 @@ type FormState = {
 };
 
 export default function ProductsPage() {
+  const { products, addProduct, updateProduct, deleteProduct } = useInventory();
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<Product[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deleteDialog, setDeleteDialog] = useState<{
@@ -93,7 +93,6 @@ export default function ProductsPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setProducts(initialProducts);
       setLoading(false);
     }, 600);
     return () => clearTimeout(timer);
@@ -118,51 +117,47 @@ export default function ProductsPage() {
     return !Object.values(nextErrors).some(Boolean);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!validateForm()) return;
 
-    if (editingProduct) {
-      // Edit existing product
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === editingProduct.id
-            ? {
-                ...p,
-                sku: formData.sku,
-                name: formData.name,
-                category: formData.category,
-                unitCost: Number(formData.unitCost),
-                reorderPoint: Number(formData.reorderPoint),
-              }
-            : p,
-        ),
-      );
-      setToast({
-        open: true,
-        message: "Product updated successfully!",
-        severity: "success",
-      });
-    } else {
-      // Add new product
-      setProducts((prev) => [
-        ...prev,
-        {
-          id: Math.max(...prev.map((p) => p.id)) + 1,
+    try {
+      if (editingProduct) {
+        // Edit existing product
+        await updateProduct(editingProduct.id, {
           sku: formData.sku,
           name: formData.name,
           category: formData.category,
           unitCost: Number(formData.unitCost),
           reorderPoint: Number(formData.reorderPoint),
-        },
-      ]);
+        });
+        setToast({
+          open: true,
+          message: "Product updated successfully!",
+          severity: "success",
+        });
+      } else {
+        // Add new product
+        await addProduct({
+          sku: formData.sku,
+          name: formData.name,
+          category: formData.category,
+          unitCost: Number(formData.unitCost),
+          reorderPoint: Number(formData.reorderPoint),
+        });
+        setToast({
+          open: true,
+          message: "Product added successfully!",
+          severity: "success",
+        });
+      }
+      handleCloseDialog();
+    } catch (error) {
       setToast({
         open: true,
-        message: "Product added successfully!",
-        severity: "success",
+        message: "Failed to save product",
+        severity: "error",
       });
     }
-
-    handleCloseDialog();
   };
 
   const handleEdit = (product: Product, e: React.MouseEvent) => {
@@ -183,17 +178,23 @@ export default function ProductsPage() {
     setDeleteDialog({ open: true, product });
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (deleteDialog.product) {
-      setProducts((prev) =>
-        prev.filter((p) => p.id !== deleteDialog.product?.id),
-      );
-      setToast({
-        open: true,
-        message: "Product deleted successfully!",
-        severity: "success",
-      });
-      setDeleteDialog({ open: false, product: null });
+      try {
+        await deleteProduct(deleteDialog.product.id);
+        setToast({
+          open: true,
+          message: "Product deleted successfully!",
+          severity: "success",
+        });
+        setDeleteDialog({ open: false, product: null });
+      } catch (error) {
+        setToast({
+          open: true,
+          message: "Failed to delete product",
+          severity: "error",
+        });
+      }
     }
   };
 

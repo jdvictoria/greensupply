@@ -22,16 +22,17 @@ import {
 import { Edit, Trash2, Plus } from "lucide-react";
 
 import type { Warehouse } from "@/lib/types";
-import { warehouses as initialWarehouses } from "@/lib/utils";
 
+import { useInventory } from "@/context/inventory-context";
 import { ToastNotification } from "@/components/toast-notification";
 import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog";
 
 export default function WarehousesPage() {
   const router = useRouter();
+  const { warehouses, addWarehouse, updateWarehouse, deleteWarehouse } =
+    useInventory();
 
   const [loading, setLoading] = useState(true);
-  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingWarehouse, setEditingWarehouse] = useState<Warehouse | null>(
     null,
@@ -60,7 +61,6 @@ export default function WarehousesPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setWarehouses(initialWarehouses);
       setLoading(false);
     }, 600);
     return () => clearTimeout(timer);
@@ -126,38 +126,40 @@ export default function WarehousesPage() {
     setDeleteDialogOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (warehouseToDelete !== null) {
-      setWarehouses(warehouses.filter((w) => w.id !== warehouseToDelete));
-      setDeleteDialogOpen(false);
-      setWarehouseToDelete(null);
-      setToastMessage("Warehouse deleted successfully");
-      setToastOpen(true);
+      try {
+        await deleteWarehouse(warehouseToDelete);
+        setDeleteDialogOpen(false);
+        setWarehouseToDelete(null);
+        setToastMessage("Warehouse deleted successfully");
+        setToastOpen(true);
+      } catch (error) {
+        setToastMessage("Failed to delete warehouse");
+        setToastOpen(true);
+      }
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!validateForm()) {
       return;
     }
 
-    if (editingWarehouse) {
-      setWarehouses(
-        warehouses.map((w) =>
-          w.id === editingWarehouse.id ? { ...w, ...formData } : w,
-        ),
-      );
-      setToastMessage("Warehouse updated successfully");
-    } else {
-      const newWarehouse: Warehouse = {
-        id: Math.max(...warehouses.map((w) => w.id)) + 1,
-        ...formData,
-      };
-      setWarehouses([...warehouses, newWarehouse]);
-      setToastMessage("Warehouse added successfully");
+    try {
+      if (editingWarehouse) {
+        await updateWarehouse(editingWarehouse.id, formData);
+        setToastMessage("Warehouse updated successfully");
+      } else {
+        await addWarehouse(formData);
+        setToastMessage("Warehouse added successfully");
+      }
+      setOpenDialog(false);
+      setToastOpen(true);
+    } catch (error) {
+      setToastMessage("Failed to save warehouse");
+      setToastOpen(true);
     }
-    setOpenDialog(false);
-    setToastOpen(true);
   };
 
   const isFormValid = () => {
