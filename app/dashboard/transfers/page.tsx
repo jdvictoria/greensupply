@@ -20,6 +20,10 @@ import {
   CircularProgress,
   Alert,
   MenuItem,
+  ToggleButtonGroup,
+  ToggleButton,
+  FormControl,
+  FormLabel,
 } from "@mui/material";
 import { ArrowRightLeft, Package } from "lucide-react";
 
@@ -59,6 +63,7 @@ export default function TransfersPage() {
     message: "",
     severity: "success",
   });
+  const [mockMode, setMockMode] = useState<"success" | "error">("success");
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -104,6 +109,14 @@ export default function TransfersPage() {
     setLoading(true);
 
     try {
+      // Simulate delay for mock operations
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Mock error mode - throw error before actual transfer
+      if (mockMode === "error") {
+        throw new Error("Mock error: Transfer operation failed");
+      }
+
       await createTransfer({
         productId: Number.parseInt(formData.productId),
         fromWarehouseId: Number.parseInt(formData.fromWarehouseId),
@@ -131,10 +144,17 @@ export default function TransfersPage() {
       setErrors({});
     } catch (error) {
       console.error(error);
-      setSubmitError("Failed to create transfer. Please try again.");
+      setSubmitError(
+        mockMode === "error"
+          ? "Mock error: Transfer operation failed"
+          : "Failed to create transfer. Please try again.",
+      );
       setToast({
         open: true,
-        message: "Failed to create transfer",
+        message:
+          mockMode === "error"
+            ? "Mock error: Transfer operation failed"
+            : "Failed to create transfer",
         severity: "error",
       });
     } finally {
@@ -318,6 +338,35 @@ export default function TransfersPage() {
                     rows={3}
                     placeholder="Add any additional notes about this transfer"
                   />
+                </Grid>
+
+                <Grid size={{ xs: 12 }}>
+                  <FormControl fullWidth>
+                    <FormLabel sx={{ mb: 1, fontSize: "0.875rem" }}>
+                      Mock Operation Mode (Testing)
+                    </FormLabel>
+                    <ToggleButtonGroup
+                      value={mockMode}
+                      exclusive
+                      onChange={(
+                        _event: React.MouseEvent<HTMLElement>,
+                        newMode: "success" | "error" | null,
+                      ) => {
+                        if (newMode !== null) {
+                          setMockMode(newMode);
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                    >
+                      <ToggleButton value="success" aria-label="success">
+                        Success
+                      </ToggleButton>
+                      <ToggleButton value="error" aria-label="error">
+                        Error
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                  </FormControl>
                 </Grid>
 
                 <Grid size={{ xs: 12 }}>
