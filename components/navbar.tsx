@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useState } from "react"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -17,10 +17,10 @@ import {
   ListItemButton,
   ListItemText,
   Badge,
-} from "@mui/material"
-import { Leaf, MenuIcon } from "lucide-react"
+} from "@mui/material";
+import { Leaf, MenuIcon } from "lucide-react";
 
-import { useInventory } from "@/context/inventory-context"
+import { useInventory } from "@/context/inventory-context";
 
 const navItems = [
   { label: "Overview", href: "/dashboard" },
@@ -29,19 +29,21 @@ const navItems = [
   { label: "Stock Levels", href: "/dashboard/stock-levels" },
   { label: "Transfers", href: "/dashboard/transfers" },
   { label: "Alerts", href: "/dashboard/alerts", showBadge: true },
-]
+];
 
 export function Navbar() {
-  const pathname = usePathname()
-  const { alerts } = useInventory()
+  const pathname = usePathname();
+  const { alerts } = useInventory();
 
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const pendingAlertsCount = alerts.filter((a) => a.status === "pending").length
+  const pendingAlertsCount = alerts.filter(
+    (a) => a.status === "pending",
+  ).length;
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }
+    setMobileOpen(!mobileOpen);
+  };
 
   return (
     <>
@@ -73,14 +75,23 @@ export function Navbar() {
               GreenSupply Co
             </Typography>
 
-            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1, alignItems: "center" }}>
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                gap: 1,
+                alignItems: "center",
+              }}
+            >
               {navItems.map((item) => (
                 <Button
                   key={item.href}
                   component={Link}
                   href={item.href}
                   sx={{
-                    color: pathname === item.href ? "primary.main" : "text.secondary",
+                    color:
+                      pathname === item.href
+                        ? "primary.main"
+                        : "text.secondary",
                     fontWeight: pathname === item.href ? 600 : 400,
                     "&:hover": {
                       bgcolor: "action.hover",
@@ -99,7 +110,12 @@ export function Navbar() {
             </Box>
 
             <Box sx={{ display: { xs: "flex", md: "none" }, gap: 1 }}>
-              <IconButton color="inherit" aria-label="open drawer" edge="end" onClick={handleDrawerToggle}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleDrawerToggle}
+              >
                 <MenuIcon size={24} />
               </IconButton>
             </Box>
@@ -144,9 +160,14 @@ export function Navbar() {
                   <ListItemText
                     primary={
                       item.showBadge && pendingAlertsCount > 0 ? (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
                           {item.label}
-                          <Badge badgeContent={pendingAlertsCount} color="error" />
+                          <Badge
+                            badgeContent={pendingAlertsCount}
+                            color="error"
+                          />
                         </Box>
                       ) : (
                         item.label
@@ -160,5 +181,5 @@ export function Navbar() {
         </Box>
       </Drawer>
     </>
-  )
+  );
 }

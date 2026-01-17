@@ -1,18 +1,33 @@
-import { Card, CardContent, Typography, Box } from "@mui/material"
-import type { LucideIcon } from "lucide-react"
+import { Card, CardContent, Typography, Box } from "@mui/material";
+import type { LucideIcon } from "lucide-react";
 
 interface MetricCardProps {
-  title: string
-  value: string | number
-  icon: LucideIcon
-  subtitle?: string
+  title: string;
+  value: string | number;
+  icon: LucideIcon;
+  subtitle?: string;
 }
 
-export function MetricCard({ title, value, icon: Icon, subtitle }: MetricCardProps) {
+export function MetricCard({
+  title,
+  value,
+  icon: Icon,
+  subtitle,
+}: MetricCardProps) {
   return (
-    <Card elevation={0} sx={{ border: 1, borderColor: "divider", height: "100%" }}>
+    <Card
+      elevation={0}
+      sx={{ border: 1, borderColor: "divider", height: "100%" }}
+    >
       <CardContent>
-        <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            mb: 2,
+          }}
+        >
           <Typography variant="body2" color="text.secondary" fontWeight={500}>
             {title}
           </Typography>
@@ -40,5 +55,5 @@ export function MetricCard({ title, value, icon: Icon, subtitle }: MetricCardPro
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
