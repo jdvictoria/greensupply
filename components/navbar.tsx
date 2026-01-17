@@ -26,7 +26,7 @@ const navItems = [
   { label: "Overview", href: "/dashboard" },
   { label: "Products", href: "/dashboard/products" },
   { label: "Warehouses", href: "/dashboard/warehouses" },
-  { label: "Stock Levels", href: "/dashboard/stock-levels" },
+  { label: "Stocks", href: "/dashboard/stocks" },
   { label: "Transfers", href: "/dashboard/transfers" },
   { label: "Alerts", href: "/dashboard/alerts", showBadge: true },
 ];
