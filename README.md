@@ -68,7 +68,7 @@ A modern, full-featured inventory management system built with Next.js, React, a
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/jdvictoria/greensupply
 cd greensupply
 ```
 
