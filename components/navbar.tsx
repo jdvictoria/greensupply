@@ -58,7 +58,6 @@ export function Navbar() {
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ gap: 2 }}>
-            <Leaf className="text-primary" size={32} />
             <Typography
               variant="h6"
               component={Link}
