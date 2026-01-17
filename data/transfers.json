@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "productId": 1,
+    "fromWarehouseId": 1,
+    "toWarehouseId": 2,
+    "quantity": 50,
+    "initiatedBy": "John Smith",
+    "status": "completed",
+    "notes": "Restocking Vancouver warehouse",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "completedAt": "2024-01-15T14:20:00Z"
+  },
+  {
+    "id": 2,
+    "productId": 3,
+    "fromWarehouseId": 2,
+    "toWarehouseId": 3,
+    "quantity": 30,
+    "initiatedBy": "Sarah Johnson",
+    "status": "completed",
+    "notes": "Transfer to meet increased demand",
+    "createdAt": "2024-01-16T09:15:00Z",
+    "completedAt": "2024-01-16T16:45:00Z"
+  },
+  {
+    "id": 3,
+    "productId": 5,
+    "fromWarehouseId": 1,
+    "toWarehouseId": 4,
+    "quantity": 20,
+    "initiatedBy": "Mike Davis",
+    "status": "completed",
+    "notes": "Regular distribution",
+    "createdAt": "2024-01-17T11:00:00Z",
+    "completedAt": "2024-01-17T15:30:00Z"
+  },
+  {
+    "id": 4,
+    "productId": 2,
+    "fromWarehouseId": 3,
+    "toWarehouseId": 1,
+    "quantity": 15,
+    "initiatedBy": "Emily Chen",
+    "status": "completed",
+    "notes": "Balancing inventory levels",
+    "createdAt": "2024-01-18T13:20:00Z",
+    "completedAt": "2024-01-18T17:00:00Z"
+  }
+]

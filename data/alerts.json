@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "productId": 3,
+    "totalStock": 45,
+    "reorderPoint": 50,
+    "alertLevel": "low",
+    "status": "pending",
+    "recommendedOrderQuantity": 200,
+    "createdAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": 2,
+    "productId": 8,
+    "totalStock": 5,
+    "reorderPoint": 30,
+    "alertLevel": "critical",
+    "status": "pending",
+    "recommendedOrderQuantity": 150,
+    "createdAt": "2024-01-16T14:20:00Z"
+  },
+  {
+    "id": 3,
+    "productId": 12,
+    "totalStock": 120,
+    "reorderPoint": 100,
+    "alertLevel": "adequate",
+    "status": "resolved",
+    "recommendedOrderQuantity": 0,
+    "createdAt": "2024-01-14T09:15:00Z",
+    "resolvedAt": "2024-01-17T11:30:00Z"
+  }
+]

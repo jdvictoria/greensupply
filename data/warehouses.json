@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Vancouver Distribution Center",
+    "location": "Vancouver, BC",
+    "code": "VAN-01"
+  },
+  {
+    "id": 2,
+    "name": "Toronto Central Warehouse",
+    "location": "Toronto, ON",
+    "code": "TOR-01"
+  },
+  {
+    "id": 3,
+    "name": "Seattle Northwest Hub",
+    "location": "Seattle, WA",
+    "code": "SEA-01"
+  },
+  {
+    "id": 4,
+    "name": "Portland Regional Center",
+    "location": "Portland, OR",
+    "code": "PDX-01"
+  },
+  {
+    "id": 5,
+    "name": "San Francisco Bay Area",
+    "location": "Oakland, CA",
+    "code": "OAK-01"
+  }
+]

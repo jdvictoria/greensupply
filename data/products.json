@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "sku": "ECO-001",
+      "name": "Bamboo Toothbrush Set",
+      "category": "Personal Care",
+      "unitCost": 12.99,
+      "reorderPoint": 50
+    },
+    {
+      "id": 2,
+      "sku": "ECO-002",
+      "name": "Reusable Beeswax Wraps",
+      "category": "Kitchen",
+      "unitCost": 18.5,
+      "reorderPoint": 30
+    },
+    {
+      "id": 3,
+      "sku": "ECO-003",
+      "name": "Organic Cotton Tote Bag",
+      "category": "Accessories",
+      "unitCost": 15.75,
+      "reorderPoint": 100
+    }
+]
+  
