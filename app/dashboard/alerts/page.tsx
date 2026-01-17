@@ -52,7 +52,8 @@ export default function AlertsPage() {
       setLoading(false);
     }, 800);
     return () => clearTimeout(timer);
-  }, [generateAlerts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount, not when generateAlerts changes
 
   const pendingAlerts = alerts.filter((a) => a.status === "pending");
   const criticalAlerts = alerts.filter(
@@ -91,7 +92,7 @@ export default function AlertsPage() {
         });
         setActionDialogOpen(false);
         setSelectedAlert(null);
-      } catch (error) {
+      } catch {
         setToast({
           open: true,
           message: "Failed to update alert",
@@ -113,6 +114,7 @@ export default function AlertsPage() {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage,
   );
+  console.log(paginatedAlerts);
 
   if (loading) {
     return (
@@ -159,7 +161,7 @@ export default function AlertsPage() {
                 message: "Alerts refreshed",
                 severity: "success",
               });
-            } catch (error) {
+            } catch {
               setToast({
                 open: true,
                 message: "Failed to refresh alerts",

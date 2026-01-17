@@ -1,6 +1,6 @@
 "use client";
 
-import type { Alert, Product, Stock } from "@/lib/types";
+import type { Alert } from "@/lib/types";
 import { getAlerts, setAlerts, getProducts, getStock } from "@/lib/storage";
 
 export async function getAlertsAction(): Promise<Alert[]> {
@@ -48,11 +48,50 @@ export async function generateAlertsAction(): Promise<Alert[]> {
       .filter((s) => s.productId === product.id)
       .reduce((sum, s) => sum + s.quantity, 0);
 
-    // Skip if alert already exists for this product
-    const existingAlert = alerts.find(
-      (a) => a.productId === product.id && a.status === "pending",
-    );
-    if (existingAlert) return;
+    // Check if there's any existing alert for this product
+    const existingAlert = alerts.find((a) => a.productId === product.id);
+
+    // If alert exists and is not resolved/dismissed, skip creating a new one
+    if (
+      existingAlert &&
+      existingAlert.status !== "resolved" &&
+      existingAlert.status !== "dismissed"
+    ) {
+      return;
+    }
+
+    // If alert exists but is resolved/dismissed, check if we should create a new one
+    if (
+      existingAlert &&
+      (existingAlert.status === "resolved" ||
+        existingAlert.status === "dismissed")
+    ) {
+      // Calculate what the alert level would be
+      const wouldBeCritical =
+        totalStock === 0 || totalStock < product.reorderPoint * 0.5;
+      const wouldBeLow =
+        totalStock < product.reorderPoint &&
+        totalStock >= product.reorderPoint * 0.5;
+
+      // Only create a new alert if:
+      // 1. Stock situation warrants an alert (critical or low)
+      // 2. AND stock level is different from the resolved alert
+      if (wouldBeCritical || wouldBeLow) {
+        // Don't create duplicate if stock level is exactly the same
+        // This prevents immediate duplicates after resolving an alert
+        if (existingAlert.totalStock === totalStock) {
+          return;
+        }
+        // Also don't create if stock is very similar (within small margin)
+        // This handles cases where stock might have changed slightly due to transfers
+        if (Math.abs(existingAlert.totalStock - totalStock) <= 5) {
+          return;
+        }
+      } else {
+        // Stock situation doesn't warrant an alert, so don't create one
+        return;
+      }
+    }
 
     let alertLevel: Alert["alertLevel"];
     let recommendedOrderQuantity = 0;
